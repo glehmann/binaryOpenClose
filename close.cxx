@@ -2,7 +2,8 @@
 #include "itkImageFileWriter.h"
 #include "itkCommand.h"
 
-#include "itkImageFilter.h"
+#include "itkBinaryMorphologicalClosingImageFilter.h"
+#include "itkBinaryBallStructuringElement.h"
 
 template < class TFilter >
 class ProgressCallback : public itk::Command
@@ -54,10 +55,18 @@ int main(int, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
 
-  typedef itk::ImageFilter< IType, IType > FilterType;
+  typedef itk::BinaryBallStructuringElement< PType, dim> KernelType;
+  KernelType ball;
+  KernelType::SizeType ballSize;
+  ballSize.Fill( 40 );
+  ball.SetRadius(ballSize);
+  ball.CreateStructuringElement();
+   
+  typedef itk::BinaryMorphologicalClosingImageFilter< IType, IType, KernelType > FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
-
+  filter->SetKernel( ball );
+   
   typedef ProgressCallback< FilterType > ProgressType;
   ProgressType::Pointer progress = ProgressType::New();
   progress->SetFilter( filter );
@@ -68,6 +77,11 @@ int main(int, char * argv[])
   writer->SetFileName( argv[2] );
   writer->Update();
 
+  // safe border test
+  filter->SetSafeBorder( true );
+  writer->SetFileName( argv[3] );
+  writer->Update(); 
+   
   return 0;
 }
 
