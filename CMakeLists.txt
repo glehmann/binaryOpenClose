@@ -38,6 +38,9 @@ SET(Libraries
 ADD_EXECUTABLE(close close.cxx) 
 TARGET_LINK_LIBRARIES(close ${Libraries})
 
+ADD_EXECUTABLE(open open.cxx) 
+TARGET_LINK_LIBRARIES(open ${Libraries})
+
 #the following line is an example of how to add a test to your project.
 #Testname is the title for this particular test.  ExecutableToRun is the
 #program which will be running this test.  It can either be a part of this
@@ -49,3 +52,6 @@ TARGET_LINK_LIBRARIES(close ${Libraries})
 ADD_TEST(RunClose close ${CMAKE_SOURCE_DIR}/2th_cthead1.png close.png close-safe.png)
 ADD_TEST(Close ImageCompare close.png ${CMAKE_SOURCE_DIR}/close.png)
 ADD_TEST(CloseSafe ImageCompare close-safe.png ${CMAKE_SOURCE_DIR}/close-safe.png)
+
+ADD_TEST(RunOpen open ${CMAKE_SOURCE_DIR}/2th_cthead1.png open.png)
+ADD_TEST(Open ImageCompare open.png ${CMAKE_SOURCE_DIR}/open.png)
