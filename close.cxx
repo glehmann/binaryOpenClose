@@ -66,6 +66,7 @@ int main(int, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetKernel( ball );
+  filter->SetSafeBorder( false );
    
   typedef ProgressCallback< FilterType > ProgressType;
   ProgressType::Pointer progress = ProgressType::New();
@@ -80,6 +81,7 @@ int main(int, char * argv[])
   FilterType::Pointer filter2 = FilterType::New();
   filter2->SetInput( filter->GetOutput() );
   filter2->SetKernel( ball );
+  filter2->SetSafeBorder( false );
 
   WriterType::Pointer writer2 = WriterType::New();
   writer2->SetInput( filter->GetOutput() );

@@ -32,7 +32,7 @@ BinaryMorphologicalClosingImageFilter<TInputImage, TOutputImage, TKernel>
   : m_Kernel()
 {
   m_ForegroundValue = NumericTraits<InputPixelType>::max();
-  m_SafeBorder = false;
+  m_SafeBorder = true;
 }
 
 template <class TInputImage, class TOutputImage, class TKernel>
