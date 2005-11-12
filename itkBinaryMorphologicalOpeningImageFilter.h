@@ -77,11 +77,11 @@ public:
 
   /** Set the value in the image to consider as "foreground". Defaults to
    * maximum value of PixelType. */
-  itkSetMacro(OpeningValue, PixelType);
+  itkSetMacro(ForegroundValue, PixelType);
  
   /** Get the value in the image considered as "foreground". Defaults to
    * maximum value of PixelType. */
-  itkGetMacro(OpeningValue, PixelType);
+  itkGetMacro(ForegroundValue, PixelType);
  
   /** Set the value in eroded part of the image. Defaults to zero */
   itkSetMacro(BackgroundValue, PixelType);
@@ -113,7 +113,7 @@ private:
   /** kernel or structuring element to use. */
   KernelType m_Kernel ;
    
-  PixelType m_OpeningValue;
+  PixelType m_ForegroundValue;
   
   PixelType m_BackgroundValue;
  

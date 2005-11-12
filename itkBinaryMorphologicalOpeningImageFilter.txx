@@ -27,7 +27,7 @@ BinaryMorphologicalOpeningImageFilter<TInputImage, TOutputImage, TKernel>
 ::BinaryMorphologicalOpeningImageFilter()
   : m_Kernel()
 {
-  m_OpeningValue = NumericTraits<PixelType>::max();
+  m_ForegroundValue = NumericTraits<PixelType>::max();
   m_BackgroundValue = NumericTraits<PixelType>::Zero;
 }
 
@@ -74,8 +74,8 @@ BinaryMorphologicalOpeningImageFilter<TInputImage, TOutputImage, TKernel>
   dilate->ReleaseDataFlagOn();
   erode->SetKernel( this->GetKernel() );
   erode->ReleaseDataFlagOn();
-  dilate->SetDilateValue( m_OpeningValue );
-  erode->SetErodeValue( m_OpeningValue );
+  dilate->SetDilateValue( m_ForegroundValue );
+  erode->SetErodeValue( m_ForegroundValue );
   erode->SetBackgroundValue( m_BackgroundValue );
     
   /** set up the minipipeline */
@@ -103,7 +103,7 @@ BinaryMorphologicalOpeningImageFilter<TInputImage, TOutputImage, TKernel>
   Superclass::PrintSelf(os, indent);
 
   os << indent << "Kernel: " << m_Kernel << std::endl;
-  os << indent << "OpeningValue: " << static_cast<typename NumericTraits<PixelType>::PrintType>(m_OpeningValue) << std::endl;
+  os << indent << "ForegroundValue: " << static_cast<typename NumericTraits<PixelType>::PrintType>(m_ForegroundValue) << std::endl;
   os << indent << "BackgroundValue: " << static_cast<typename NumericTraits<PixelType>::PrintType>(m_BackgroundValue) << std::endl;
 }
 

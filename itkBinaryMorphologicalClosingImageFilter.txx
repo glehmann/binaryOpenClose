@@ -31,7 +31,7 @@ BinaryMorphologicalClosingImageFilter<TInputImage, TOutputImage, TKernel>
 ::BinaryMorphologicalClosingImageFilter()
   : m_Kernel()
 {
-  m_ClosingValue = NumericTraits<InputPixelType>::max();
+  m_ForegroundValue = NumericTraits<InputPixelType>::max();
   m_SafeBorder = false;
 }
 
@@ -71,7 +71,7 @@ BinaryMorphologicalClosingImageFilter<TInputImage, TOutputImage, TKernel>
   // because closing is extensive so no background pixels will be added
   // it is just needed for internal erosion filter and constant padder
   InputPixelType backgroundValue = NumericTraits<InputPixelType>::Zero;
-  if ( m_ClosingValue == backgroundValue )
+  if ( m_ForegroundValue == backgroundValue )
     {
     // current background value is already used for foreground value
     // choose another one
@@ -88,11 +88,11 @@ BinaryMorphologicalClosingImageFilter<TInputImage, TOutputImage, TKernel>
   // create the pipeline without input and output image
   dilate->ReleaseDataFlagOn();
   dilate->SetKernel( this->GetKernel() );
-  dilate->SetDilateValue( m_ClosingValue );
+  dilate->SetDilateValue( m_ForegroundValue );
 
   erode->SetKernel( this->GetKernel() );
   erode->ReleaseDataFlagOn();
-  erode->SetErodeValue( m_ClosingValue );
+  erode->SetErodeValue( m_ForegroundValue );
   erode->SetBackgroundValue( backgroundValue );
   erode->SetInput( dilate->GetOutput() );
 
@@ -164,7 +164,7 @@ BinaryMorphologicalClosingImageFilter<TInputImage, TOutputImage, TKernel>
 
   while( !outIt.IsAtEnd() )
     {
-    if( outIt.Get() != m_ClosingValue )
+    if( outIt.Get() != m_ForegroundValue )
       {
       outIt.Set( static_cast<OutputPixelType>( inIt.Get() ) );
       }
@@ -184,7 +184,7 @@ BinaryMorphologicalClosingImageFilter<TInputImage, TOutputImage, TKernel>
   Superclass::PrintSelf(os, indent);
 
   os << indent << "Kernel: " << m_Kernel << std::endl;
-  os << indent << "ClosingValue: " << static_cast<typename NumericTraits<InputPixelType>::PrintType>(m_ClosingValue) << std::endl;
+  os << indent << "ForegroundValue: " << static_cast<typename NumericTraits<InputPixelType>::PrintType>(m_ForegroundValue) << std::endl;
   os << indent << "SafeBorder: " << m_SafeBorder << std::endl;
 }
 

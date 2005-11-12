@@ -78,11 +78,11 @@ public:
 
   /** Set the value in the image to consider as "foreground". Defaults to
    * maximum value of InputPixelType. */
-  itkSetMacro(ClosingValue, InputPixelType);
+  itkSetMacro(ForegroundValue, InputPixelType);
  
   /** Get the value in the image considered as "foreground". Defaults to
    * maximum value of InputPixelType. */
-  itkGetMacro(ClosingValue, InputPixelType);
+  itkGetMacro(ForegroundValue, InputPixelType);
  
   
   /** A safe border is added to input image to avoid borders effects
@@ -115,7 +115,7 @@ private:
   /** kernel or structuring element to use. */
   KernelType m_Kernel ;
    
-  InputPixelType m_ClosingValue;
+  InputPixelType m_ForegroundValue;
   
   bool m_SafeBorder;
 } ; // end of class
