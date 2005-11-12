@@ -77,10 +77,22 @@ int main(int, char * argv[])
   writer->SetFileName( argv[2] );
   writer->Update();
 
+  FilterType::Pointer filter2 = FilterType::New();
+  filter2->SetInput( filter->GetOutput() );
+  filter2->SetKernel( ball );
+
+  WriterType::Pointer writer2 = WriterType::New();
+  writer2->SetInput( filter->GetOutput() );
+  writer2->SetFileName( argv[3] );
+  writer2->Update();
+
   // safe border test
   filter->SetSafeBorder( true );
-  writer->SetFileName( argv[3] );
+  filter2->SetSafeBorder( true );
+  writer->SetFileName( argv[4] );
+  writer2->SetFileName( argv[5] );
   writer->Update(); 
+  writer2->Update();
    
   return 0;
 }
