@@ -49,11 +49,11 @@ TARGET_LINK_LIBRARIES(open ${Libraries})
 #any tests you can comment out or delete the following line.
 # ADD_TEST(Testname ExecutableToRun arg1 arg2 arg3)
 
-ADD_TEST(RunClose close ${CMAKE_SOURCE_DIR}/2th_cthead1.png close.png close2.png close-safe.png close-safe2.png)
+ADD_TEST(RunClose close ${CMAKE_SOURCE_DIR}/2th_cthead1.png close-unsafe.png close-unsafe2.png close.png close2.png)
 ADD_TEST(Close ImageCompare close.png ${CMAKE_SOURCE_DIR}/close.png)
 ADD_TEST(Close2 ImageCompare close2.png ${CMAKE_SOURCE_DIR}/close.png)
-ADD_TEST(CloseSafe ImageCompare close-safe.png ${CMAKE_SOURCE_DIR}/close-safe.png)
-ADD_TEST(CloseSafe2 ImageCompare close-safe2.png ${CMAKE_SOURCE_DIR}/close-safe.png)
+ADD_TEST(CloseUnsafe ImageCompare close-unsafe.png ${CMAKE_SOURCE_DIR}/close-unsafe.png)
+ADD_TEST(CloseUnsafe2 ImageCompare close-unsafe2.png ${CMAKE_SOURCE_DIR}/close-unsafe.png)
 
 ADD_TEST(RunOpen open ${CMAKE_SOURCE_DIR}/2th_cthead1.png open.png open2.png)
 ADD_TEST(Open ImageCompare open.png ${CMAKE_SOURCE_DIR}/open.png)
