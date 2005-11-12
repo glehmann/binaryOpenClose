@@ -24,7 +24,7 @@ namespace itk {
  * \brief binary morphological closing of an image.
  *
  * This filter removes small (i.e., smaller than the structuring 
- * element)holes and tube like structures in the interior or at the
+ * element) holes and tube like structures in the interior or at the
  * boundaries of the image. The morphological closing of an image
  * "f" is defined as:
  * Closing(f) = Erosion(Dilation(f)).
