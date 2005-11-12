@@ -96,13 +96,12 @@ protected:
   ~BinaryMorphologicalClosingImageFilter() {};
   void PrintSelf(std::ostream& os, Indent indent) const;
 
-  /** BinaryMorphologicalClosingImageFilter needs the entire input be
-   * available. Thus, it needs to provide an implementation of
-   * GenerateInputRequestedRegion(). */
+  /** BinaryMorphologicalClosingImageFilter need to make sure they request enough of an
+   * input image to account for the structuring element size.  The input
+   * requested region is expanded by the radius of the structuring element.
+   * If the request extends past the LargestPossibleRegion for the input,
+   * the request is cropped by the LargestPossibleRegion. */
   void GenerateInputRequestedRegion() ;
-
-  /** BinaryMorphologicalClosingImageFilter will produce the entire output. */
-  void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
 
   /** Single-threaded version of GenerateData.  This filter delegates
    * to GrayscaleDilateImageFilter GrayscaleErodeImageFilter. */
