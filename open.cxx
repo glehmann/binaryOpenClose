@@ -58,7 +58,7 @@ int main(int, char * argv[])
   typedef itk::BinaryBallStructuringElement< PType, dim> KernelType;
   KernelType ball;
   KernelType::SizeType ballSize;
-  ballSize.Fill( 40 );
+  ballSize.Fill( 8 );
   ball.SetRadius(ballSize);
   ball.CreateStructuringElement();
    
@@ -66,6 +66,8 @@ int main(int, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetKernel( ball );
+  filter->SetForegroundValue( 200 );
+  filter->SetBackgroundValue( 150 );
    
   typedef ProgressCallback< FilterType > ProgressType;
   ProgressType::Pointer progress = ProgressType::New();
@@ -80,6 +82,7 @@ int main(int, char * argv[])
   FilterType::Pointer filter2 = FilterType::New();
   filter2->SetInput( filter->GetOutput() );
   filter2->SetKernel( ball );
+  filter2->SetForegroundValue( 200 );
    
   WriterType::Pointer writer2 = WriterType::New();
   writer2->SetInput( filter->GetOutput() );
