@@ -6,8 +6,8 @@
 \institute{Biologie du d\'eveloppement et de la reproduction, INRA de Jouy-en-Josas}
 
 \title{Binary morphological closing and opening image filters}
-\abstract{Binary morphological closing and opening image filters removes structures smaller than the structuring element in a binary image.}
-\keyword{Morp}
+\abstract{Binary morphological closing and opening image filters remove structures smaller than the structuring element in a binary image.}
+\keyword{mathematical morphology, binary image, opening, closing}
 \year{2005}
 
 \leftmark{Ga\"etan Lehmann}
@@ -20,7 +20,7 @@
 
 \section{Description}
 
-Binary morphological closing and opening image filters removes structures smaller than the structuring element in a binary image. Those filters also take care of boundary effects and of backgound values.
+Binary morphological closing and opening image filters remove structures smaller than the structuring element in a binary image. These filters manage the boundary effects and the backgound values.
 
 \section{Implementation}
 
@@ -28,7 +28,7 @@ BinaryMorphologicalClosingImageFilter and BinaryMorphologicalOpeningImageFilter 
 
 BinaryMorphologicalOpeningImageFilter runs a BinaryErodeImageFilter followed by a BinaryDilateImageFilter. Some background pixels may appear in the output image, so the user can choose the value of added background pixels.
 
-BinaryMorphologicalClosingImageFilter runs a BinaryDilateImageFilter followed by a BinaryErodeImageFilter \footnote{BinaryMorphologicalClosingImageFilter and BinaryMorphologicalOpeningImageFilter do an intensive use of BinaryDilateImageFilter and BinaryErodeImageFilter, but the filters currently in ITK have a bug when the requested region is smaller than the available one. A version of those filters which fix that bug can be found in the archive. More details at http://public.kitware.com/pipermail/insight-users/2005-September/014844.html.}. If SafeBorder is true (the default), the BinaryDilateImageFilter is preceded by a ConstantPadImageFilter and the BinaryErodeImageFilter is followed by a CropImageFilter in order to avoid border effects. Finally, BinaryMorphologicalClosingImageFilter copy the background pixel from the input image to avoid the modifications of the background done by the BinaryErodeImageFilter. BinaryMorphologicalClosingImageFilter will never add backgound pixels so the backgound value used for the erode filter is automaticaly choosen.
+BinaryMorphologicalClosingImageFilter runs a BinaryDilateImageFilter followed by a BinaryErodeImageFilter\footnote{BinaryMorphologicalClosingImageFilter and BinaryMorphologicalOpeningImageFilter use intensively BinaryDilateImageFilter and BinaryErodeImageFilter, but a bug occur in these filters when the requested region is smaller than the available one. A version of these filters which fix that bug can be found in the archive. More details at http://public.kitware.com/pipermail/insight-users/2005-September/014844.html.}. If SafeBorder is true (the default), the BinaryDilateImageFilter is preceded by a ConstantPadImageFilter and the BinaryErodeImageFilter is followed by a CropImageFilter in order to avoid border effects. Finally, BinaryMorphologicalClosingImageFilter copy the background pixels from the input image to avoid the modifications of the background done by the BinaryErodeImageFilter. BinaryMorphologicalClosingImageFilter will never add background pixels so the background value used for the erode filter is automatically chosen.
 
 \section{Usage}
 
@@ -39,7 +39,7 @@ First of all, the user must create a structuring element. As usual, the headers 
 #include "itkBinaryMorphologicalOpeningImageFilter.h"
 #include "itkBinaryMorphologicalClosingImageFilter.h"
 \end{lstlisting}
-Create the structuring element - a ball of radius 40
+Create the structuring element - a disk of radius 40
 \begin{lstlisting}
 typedef itk::BinaryBallStructuringElement
   < PType, dim> KernelType;
