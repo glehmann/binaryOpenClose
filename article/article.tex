@@ -19,14 +19,69 @@
 % \tableofcontents
 
 \section{Description}
+
 Binary morphological closing and opening image filters removes structures smaller than the structuring element in a binary image. Those filters also take care of boundary effects and of backgound values.
 
 \section{Implementation}
+
 BinaryMorphologicalClosingImageFilter and BinaryMorphologicalOpeningImageFilter are mainly a sequence of filters.
 
 BinaryMorphologicalOpeningImageFilter runs a BinaryErodeImageFilter followed by a BinaryDilateImageFilter. Some background pixels may appear in the output image, so the user can choose the value of added background pixels.
 
-BinaryMorphologicalClosingImageFilter runs a BinaryDilateImageFilter followed by a BinaryErodeImageFilter \footnote{BinaryMorphologicalClosingImageFilter and BinaryMorphologicalOpeningImageFilter do an intensive use of BinaryDilateImageFilter and BinaryErodeImageFilter, but the filters currently in ITK have a bug when the requested region is smaller than the available one. A version of those filters which fix that bug can be found in the archive. More details at http://public.kitware.com/pipermail/insight-users/2005-September/014844.html.}. If SafeBorder is true (the default), the BinaryDilateImageFilter is preceded by a ConstantPadImageFilter and the BinaryErodeImageFilter is followed by a CropImageFilter in order to avoid border effects. Finally, BinaryMorphologicalClosingImageFilter copy the background pixel from the input image to avoid the modifications of the background done by the BinaryErodeImageFilter. BinaryMorphologicalClosingImageFilter will never add backgound pixels so the backgound value used for the erode filter is automaticaly choosen. 
+BinaryMorphologicalClosingImageFilter runs a BinaryDilateImageFilter followed by a BinaryErodeImageFilter \footnote{BinaryMorphologicalClosingImageFilter and BinaryMorphologicalOpeningImageFilter do an intensive use of BinaryDilateImageFilter and BinaryErodeImageFilter, but the filters currently in ITK have a bug when the requested region is smaller than the available one. A version of those filters which fix that bug can be found in the archive. More details at http://public.kitware.com/pipermail/insight-users/2005-September/014844.html.}. If SafeBorder is true (the default), the BinaryDilateImageFilter is preceded by a ConstantPadImageFilter and the BinaryErodeImageFilter is followed by a CropImageFilter in order to avoid border effects. Finally, BinaryMorphologicalClosingImageFilter copy the background pixel from the input image to avoid the modifications of the background done by the BinaryErodeImageFilter. BinaryMorphologicalClosingImageFilter will never add backgound pixels so the backgound value used for the erode filter is automaticaly choosen.
+
+\section{Usage}
+
+First of all, the user must create a structuring element. As usual, the headers must be included
+
+\begin{lstlisting}
+#include "itkBinaryBallStructuringElement.h"
+#include "itkBinaryMorphologicalOpeningImageFilter.h"
+#include "itkBinaryMorphologicalClosingImageFilter.h"
+\end{lstlisting}
+Create the structuring element - a ball of radius 40
+\begin{lstlisting}
+typedef itk::BinaryBallStructuringElement
+  < PType, dim> KernelType;
+KernelType ball;
+KernelType::SizeType ballSize;
+ballSize.Fill( 40 );
+ball.SetRadius(ballSize);
+ball.CreateStructuringElement();
+\end{lstlisting}
+Create the closing filter
+\begin{lstlisting}
+typedef itk::BinaryMorphologicalClosingImageFilter
+  < IType, IType, KernelType > CloseType;
+CloseType::Pointer close = CloseType::New();
+close->SetInput( filter->GetOutput() );
+close->SetKernel( ball );
+\end{lstlisting}
+The SetSafeBorder() method can be used to disable the safe border option (see Figure~~\ref{unsafe})
+\begin{lstlisting}
+close->SetSafeBorder( false );
+\end{lstlisting}
+The SetForegroundValue() can be used to set the foreground value used for the closing. The default is itk::NumericTraits$<$ PType $>$::max()
+\begin{lstlisting}
+close->SetForegroundValue( 200 );
+\end{lstlisting}
+Create the opening filter
+\begin{lstlisting}
+typedef itk::BinaryMorphologicalOpeningImageFilter
+  < IType, IType, KernelType > OpenType;
+OpenType::Pointer erode = OpenType::New();
+erode->SetInput( filter->GetOutput() );
+erode->SetKernel( ball );
+\end{lstlisting}
+The SetForegroundValue() can be used to set the foreground value used for the opening. The default is itk::NumericTraits$<$ PType $>$::max()
+\begin{lstlisting}
+erode->SetForegroundValue( 200 );
+\end{lstlisting}
+The SetBackgroundValue() method can be used to set the value of pixels which will be moved to backgound (see Figure\ref{open}). The default is itk::NumericTraits$<$ PType $>$::Zero
+\begin{lstlisting}
+erode->SetBackgroundValue( 150 );
+\end{lstlisting}
+
 \section{Example}
 
 \begin{figure}[b]
@@ -44,13 +99,13 @@ BinaryMorphologicalClosingImageFilter runs a BinaryDilateImageFilter followed by
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{close-unsafe.eps}
-\caption{The closed image, with SafeBorder=false. The border effects are clearly visible on the right and on the bottom of the image, but are also there on the top and on the left of the image. SafeBorder=false must be used very carefully.}
+\caption{The closed image, with SafeBorder=false. The border effects are clearly visible on the right and on the bottom of the image, but are also there on the top and on the left of the image. SafeBorder=false must be used very carefully.\label{unsafe}}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{open.eps}
-\caption{The opened image with a disc of radius 8. Only the foreground (light grey) regions of the input image where the structuring element fit are kept in light grey; the other foreground regions are added to backgound (in middle grey (150)).}
+\caption{The opened image with a disc of radius 8. Only the foreground (light grey) regions of the input image where the structuring element fit are kept in light grey; the other foreground regions are added to backgound (in middle grey (150)).\label{open}}
 \end{figure}
 
 \end{document}
