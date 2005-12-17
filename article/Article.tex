@@ -15,7 +15,6 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 
 \begin{document}
-\lstset{language=c++}
 \maketitle
 
 \ifhtml
@@ -48,13 +47,13 @@ BinaryMorphologicalClosingImageFilter runs a BinaryDilateImageFilter followed by
 
 First of all, the user must create a structuring element. As usual, the headers must be included
 
-\begin{lstlisting}
+\small \begin{verbatim}
 #include "itkBinaryBallStructuringElement.h"
 #include "itkBinaryMorphologicalOpeningImageFilter.h"
 #include "itkBinaryMorphologicalClosingImageFilter.h"
-\end{lstlisting}
+\end{verbatim} \normalsize
 Create the structuring element - a disk of radius 40
-\begin{lstlisting}
+\small \begin{verbatim}
 typedef itk::BinaryBallStructuringElement
   < PType, dim> KernelType;
 KernelType ball;
@@ -62,39 +61,39 @@ KernelType::SizeType ballSize;
 ballSize.Fill( 40 );
 ball.SetRadius(ballSize);
 ball.CreateStructuringElement();
-\end{lstlisting}
+\end{verbatim} \normalsize
 Create the closing filter
-\begin{lstlisting}
+\small \begin{verbatim}
 typedef itk::BinaryMorphologicalClosingImageFilter
   < IType, IType, KernelType > CloseType;
 CloseType::Pointer close = CloseType::New();
 close->SetInput( filter->GetOutput() );
 close->SetKernel( ball );
-\end{lstlisting}
-The SetSafeBorder() method can be used to disable the safe border option (see Figure~~\ref{unsafe})
-\begin{lstlisting}
+\end{verbatim} \normalsize
+The SetSafeBorder() method can be used to disable the safe border option (see Figure~\ref{unsafe})
+\small \begin{verbatim}
 close->SetSafeBorder( false );
-\end{lstlisting}
-The SetForegroundValue() can be used to set the foreground value used for the closing. The default is itk::NumericTraits$<$ PType $>$::max()
-\begin{lstlisting}
+\end{verbatim} \normalsize
+The \code{SetForegroundValue()} can be used to set the foreground value used for the closing. The default is \code{itk::NumericTraits$<$ PType $>$::max()}
+\small \begin{verbatim}
 close->SetForegroundValue( 200 );
-\end{lstlisting}
+\end{verbatim} \normalsize
 Create the opening filter
-\begin{lstlisting}
+\small \begin{verbatim}
 typedef itk::BinaryMorphologicalOpeningImageFilter
   < IType, IType, KernelType > OpenType;
 OpenType::Pointer erode = OpenType::New();
 erode->SetInput( filter->GetOutput() );
 erode->SetKernel( ball );
-\end{lstlisting}
-The SetForegroundValue() can be used to set the foreground value used for the opening. The default is itk::NumericTraits$<$ PType $>$::max()
-\begin{lstlisting}
+\end{verbatim} \normalsize
+The \code{SetForegroundValue()} can be used to set the foreground value used for the opening. The default is \code{itk::NumericTraits$<$ PType $>$::max()}
+\small \begin{verbatim}
 erode->SetForegroundValue( 200 );
-\end{lstlisting}
-The SetBackgroundValue() method can be used to set the value of pixels which will be moved to backgound (see Figure\ref{open}). The default is itk::NumericTraits$<$ PType $>$::Zero
-\begin{lstlisting}
+\end{verbatim} \normalsize
+The SetBackgroundValue() method can be used to set the value of pixels which will be moved to backgound (see Figure~\ref{open}). The default is itk::NumericTraits$<$ PType $>$::Zero
+\small \begin{verbatim}
 erode->SetBackgroundValue( 150 );
-\end{lstlisting}
+\end{verbatim} \normalsize
 
 \section{Examples}
 
