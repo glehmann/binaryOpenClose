@@ -1,22 +1,36 @@
-\documentclass[IJ]{cesj}
-\usepackage{graphicx}
+\documentclass{InsightArticle}
+\usepackage[dvips,
+bookmarks,
+bookmarksopen,
+backref,
+colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
+]{hyperref}
 \usepackage{listings}
 
-\author{Ga\"etan Lehmann}
-\institute{Biologie du d\'eveloppement et de la reproduction, INRA de Jouy-en-Josas}
 
 \title{Binary morphological closing and opening image filters}
-\abstract{Binary morphological closing and opening image filters remove structures smaller than the structuring element in a binary image.}
-\keyword{mathematical morphology, binary image, opening, closing}
-\year{2005}
+\release{1}
+\author{Ga\"etan Lehmann}
+\authoraddress{Biologie du d\'eveloppement et de la reproduction, INRA de Jouy-en-Josas}
 
-\leftmark{Ga\"etan Lehmann}
-\rightmark{Ga\"etan Lehmann}
 
 \begin{document}
 \lstset{language=c++}
 \maketitle
-% \tableofcontents
+
+\ifhtml
+\chapter*{Front Matter\label{front}}
+\fi
+
+
+\begin{abstract}
+\noindent
+Binary morphological closing and opening image filters remove structures smaller than the structuring element in a binary image.
+\end{abstract}
+% \keyword{mathematical morphology, binary image, opening, closing}
+
+\tableofcontents
+
 
 \section{Description}
 
@@ -86,25 +100,25 @@ erode->SetBackgroundValue( 150 );
 
 \begin{figure}[b]
 \centering
-\includegraphics[width=0.5\textwidth]{2th_cthead1.eps}
+\includegraphics{2th_cthead1.eps}
 \caption{The input image. The image contains 3 pixels values: black (0), dark grey (100) and light grey (200). Each those values can be used as foreground value. In the next examples, the light grey is used as foreground and the other values as background.}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{close.eps}
+\includegraphics{close.eps}
 \caption{The input image closed by a disc of radius 40, with SafeBorder=true. All background regions smaller than the structuring element are filled with the foreground value. The other background regions are not modified.}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{close-unsafe.eps}
+\includegraphics{close-unsafe.eps}
 \caption{The input image closed by a disc of radius 40, with SafeBorder=false. The border effects are clearly visible on the right and bottom side of the image, but are also there on the top and left side of the image. SafeBorder=false must be used very carefully.\label{unsafe}}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{open.eps}
+\includegraphics{open.eps}
 \caption{The opened image with a disc of radius 8. Only the foreground (light grey) regions of the input image where the structuring element fit are kept in light grey; the other foreground regions are added to the background (in-between grey (150)).\label{open}}
 \end{figure}
 
