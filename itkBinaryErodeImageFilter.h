@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryErodeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/09/13 19:17:35 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2005/11/11 20:16:05 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -33,7 +33,7 @@ namespace itk
 {
 /**
  * \class BinaryErodeImageFilter
- * \brief Fast binary dilation
+ * \brief Fast binary erosion
  *
  * BinaryErodeImageFilter is a binary dilation
  * morphologic operation. This implementation is based on the papers:
@@ -47,12 +47,12 @@ namespace itk
  * Processing. Vol. 9. No. 3. 2000. pp. 283-286.
  *
  * Gray scale images can be processed as binary images by selecting a
- * "DilateValue".  Pixel values matching the dilate value are
+ * "ErodeValue".  Pixel values matching the dilate value are
  * considered the "foreground" and all other pixels are
  * "background". This is useful in processing segmented images where
  * all pixels in segment #1 have value 1 and pixels in segment #2 have
  * value 2, etc. A particular "segment number" can be processed.
- * DilateValue defaults to the maximum possible value of the
+ * ErodeValue defaults to the maximum possible value of the
  * PixelType.
  *
  * The structuring element is assumed to be composed of binary values
@@ -163,20 +163,7 @@ protected:
   virtual ~BinaryErodeImageFilter(){}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
-	/** BinaryErodeImageFilter can be implemented as a multithreaded filter.
-	* Therefore, this implementation provides a ThreadedGenerateData()
-	* routine which is called for each processing thread. The output
-	* image data is allocated automatically by the superclass prior to
-	* calling ThreadedGenerateData().  ThreadedGenerateData can only
-	* write to the portion of the output image specified by the
-	* parameter "outputRegionForThread"
-	*
-	* \sa ImageToImageFilter::ThreadedGenerateData(),
-	*     ImageToImageFilter::GenerateData() */
-	void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-		int threadId );
-    
-  void BeforeThreadedGenerateData();
+  void GenerateData();
 
   // type inherited from the superclass
   typedef typename Superclass::NeighborIndexContainer NeighborIndexContainer;

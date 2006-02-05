@@ -192,6 +192,10 @@ public:
    * NumericTraits<PixelType>::NonpositiveMin(). */
   itkGetConstMacro(BackgroundValue, OutputPixelType);
   
+  itkSetMacro(BoundaryIsForeground, bool);
+  itkGetConstReferenceMacro(BoundaryIsForeground, bool);
+  itkBooleanMacro(BoundaryIsForeground);
+
 protected:
   BinaryMorphologyImageFilter();
   virtual ~BinaryMorphologyImageFilter(){}
@@ -257,6 +261,8 @@ protected:
    */
   InputSizeType GetRadius() const
     { return m_Radius; }
+
+  bool m_BoundaryIsForeground;
 
 private:
   BinaryMorphologyImageFilter(const Self&); //purposely not implemented

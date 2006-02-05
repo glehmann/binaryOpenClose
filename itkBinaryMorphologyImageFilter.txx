@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMorphologyImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005/09/30 20:29:41 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/01/11 19:43:31 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,6 +40,7 @@ BinaryMorphologyImageFilter<TInputImage, TOutputImage, TKernel>
   m_Radius.Fill(1);
   m_ForegroundValue = NumericTraits<InputPixelType>::max();
   m_BackgroundValue = NumericTraits<OutputPixelType>::NonpositiveMin();
+  this->SetNumberOfThreads(1);
 }
 
 template <class TInputImage, class TOutputImage, class TKernel>
@@ -91,10 +92,7 @@ BinaryMorphologyImageFilter<TInputImage, TOutputImage, TKernel>
     
     // build an exception
     InvalidRequestedRegionError e(__FILE__, __LINE__);
-    OStringStream msg;
-    msg << static_cast<const char *>(this->GetNameOfClass())
-        << "::GenerateInputRequestedRegion()";
-    e.SetLocation(msg.str().c_str());
+/*    e.SetLocation(ITK_LOCATION);*/
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
@@ -409,8 +407,8 @@ BinaryMorphologyImageFilter<TInputImage, TOutput, TKernel>
   Superclass::PrintSelf( os, indent );
   os << indent << "Radius which defines connectivity neighborhood: " << m_Radius << std::endl;
   os << indent << "Kernel which defines structuring element: " << m_Kernel << std::endl;
-  os << indent << "Foreground Value: " << m_ForegroundValue << std::endl;
-  os << indent << "Background Value: " << m_BackgroundValue << std::endl;
+  os << indent << "Foreground Value: " << static_cast<typename NumericTraits<InputPixelType>::PrintType>(m_ForegroundValue) << std::endl;
+  os << indent << "Background Value: " << static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_BackgroundValue) << std::endl;
 }
 
 } // end namespace itk

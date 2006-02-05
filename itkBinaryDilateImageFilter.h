@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryDilateImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/09/13 19:17:35 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2005/11/11 20:16:05 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -163,20 +163,7 @@ protected:
   virtual ~BinaryDilateImageFilter(){}
   void PrintSelf(std::ostream& os, Indent indent) const;
 
-	/** BinaryDilateImageFilter can be implemented as a multithreaded filter.
-	* Therefore, this implementation provides a ThreadedGenerateData()
-	* routine which is called for each processing thread. The output
-	* image data is allocated automatically by the superclass prior to
-	* calling ThreadedGenerateData().  ThreadedGenerateData can only
-	* write to the portion of the output image specified by the
-	* parameter "outputRegionForThread"
-	*
-	* \sa ImageToImageFilter::ThreadedGenerateData(),
-	*     ImageToImageFilter::GenerateData() */
-	void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-		int threadId );
-    
-  void BeforeThreadedGenerateData();
+  void GenerateData();
 
   // type inherited from the superclass
   typedef typename Superclass::NeighborIndexContainer NeighborIndexContainer;
