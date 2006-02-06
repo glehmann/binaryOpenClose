@@ -167,8 +167,6 @@ protected:
 
   // type inherited from the superclass
   typedef typename Superclass::NeighborIndexContainer NeighborIndexContainer;
-  typedef typename Superclass::BorderCellContainer BorderCellContainer;
-  typedef typename Superclass::BorderCell BorderCell;
 
 private:
   BinaryDilateImageFilter(const Self&); //purposely not implemented

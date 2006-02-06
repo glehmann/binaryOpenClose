@@ -65,8 +65,9 @@ BinaryErodeImageFilter< TInputImage, TOutputImage, TKernel>
   // Setup a progress reporter.  We have 4 stages to the algorithm so
   // pretend we have 4 times the number of pixels
   ProgressReporter progress(this, 0,
-                            outputRegion.GetNumberOfPixels()
-                            + 3*tmpRequestedRegion.GetNumberOfPixels() );
+                            outputRegion.GetNumberOfPixels() * 3
+                            + tmpRequestedRegion.GetNumberOfPixels()
+                            + requiredInputRegion.GetNumberOfPixels() );
   
   // Allocate and reset output. We copy the input to the output,
   // except for pixels with DilateValue.  These pixels are initially
@@ -154,8 +155,6 @@ BinaryErodeImageFilter< TInputImage, TOutputImage, TKernel>
   unsigned int centerPixelCode = neighborhoodSize / 2;
   
   std::queue<IndexType> propagQueue;
-  BorderCellContainer borderContainer;
-  unsigned long numberOfBorderPixels  = 0;
 
   // Neighborhood iterators used to track the surface.
   //
@@ -178,8 +177,11 @@ BinaryErodeImageFilter< TInputImage, TOutputImage, TKernel>
         !tmpRegIndexIt.IsAtEnd();
         ++tmpRegIndexIt, ++oNeighbIt )
     {
+
+    unsigned char tmpValue = tmpRegIndexIt.Get();
+
     // Test current pixel: it is active ( on ) or not?
-    if( tmpRegIndexIt.Get() == onTag )
+    if( tmpValue == onTag )
       {
       // The current pixel has not been treated previously.  That
       // means that we do not know that it is an inner pixel of a
@@ -211,11 +213,16 @@ BinaryErodeImageFilter< TInputImage, TOutputImage, TKernel>
         // add it to border container.
         // its code is center pixel code because it is the first pixel
         // of the connected component border
-        BorderCell cell;
-        cell.index    = tmpRegIndexIt.GetIndex();
-        cell.code     = centerPixelCode;
-        borderContainer.push_back( cell );
-        ++numberOfBorderPixels;
+
+        // paint the structuring element
+        typename NeighborIndexContainer::const_iterator itIndex;
+        NeighborIndexContainer& indexDifferenceSet = this->GetDifferenceSet( centerPixelCode );
+        for( itIndex = indexDifferenceSet.begin(); itIndex != indexDifferenceSet.end(); ++itIndex )
+          {
+          IndexType idx = tmpRegIndexIt.GetIndex() + *itIndex;
+          if( outputRegion.IsInside( idx ) )
+            { output->SetPixel( idx, backgroundValue ); }
+          }
  
         // add it to queue
         propagQueue.push( tmpRegIndexIt.GetIndex() );
@@ -275,12 +282,15 @@ BinaryErodeImageFilter< TInputImage, TOutputImage, TKernel>
                   // add it to queue
                   propagQueue.push( neighbIndex );
     
-                  // add the pixel index to border container
-                  BorderCell celln;
-                  celln.index = neighbIndex;
-                  celln.code  = i;
-                  borderContainer.push_back( celln );
-                  ++numberOfBorderPixels;
+                  // paint the structuring element
+                  typename NeighborIndexContainer::const_iterator itIndex;
+                  NeighborIndexContainer& indexDifferenceSet = this->GetDifferenceSet( i );
+                  for( itIndex = indexDifferenceSet.begin(); itIndex != indexDifferenceSet.end(); ++itIndex )
+                    {
+                    IndexType idx = neighbIndex + *itIndex;
+                    if( outputRegion.IsInside( idx ) )
+                      { output->SetPixel( idx, backgroundValue ); }
+                    }
                   }
                 }
               else
@@ -300,14 +310,15 @@ BinaryErodeImageFilter< TInputImage, TOutputImage, TKernel>
         } // if( bIsOnCountour )
       else
         { tmpRegIndexIt.Set( innerTag ); }
+
+      progress.CompletedPixel();    
       
       } // if( tmpRegIndexIt.Get() == onTag )
-    else
+    else if( tmpValue == backgroundTag )
       { progress.CompletedPixel(); }
     // Here, the pixel is a background pixel ( value at 0 ) or an
     // already treated pixel:
     //     2 for border pixel, 3 for inner pixel
-    
     }
   
 
@@ -343,35 +354,6 @@ BinaryErodeImageFilter< TInputImage, TOutputImage, TKernel>
   onit.OverrideBoundaryCondition(&obc);
   onit.GoToBegin();
 
-  // Paint SE     --> "( BORDER(X) (+) B )"
-  for( typename BorderCellContainer::iterator it = borderContainer.begin(); it != borderContainer.end(); ++it )
-    {
-    // Retrieve pixel index
-    BorderCell cell    = *it;
-    IndexType index = cell.index;
-    unsigned int code = cell.code;
-    
-    // Force location of neighbour iterator 
-    onit +=  index - onit.GetIndex();
-
-    // Thanks to code, we know the exact index of the region to paint
-    typename NeighborIndexContainer::const_iterator itIndex;
-    NeighborIndexContainer& indexDifferenceSet = this->GetDifferenceSet( code );
-    
-    bool bIsInBound;
-    for( itIndex = indexDifferenceSet.begin(); itIndex != indexDifferenceSet.end(); ++itIndex )
-      { onit.SetPixel( *itIndex, backgroundValue, bIsInBound ); }
-    
-    progress.CompletedPixel();
-    }
-  
-  // Fake progress in order to complete the progress
-/*  unsigned long numberOfOutputPixels
-    = tmpRequestedRegion.GetNumberOfPixels();
-  for( i = numberOfBorderPixels; i < numberOfOutputPixels; ++i )
-    {
-    progress.CompletedPixel();
-    }*/
   
   // Paint input image translated with respect to the SE CCs vectors
   // --> "( Xb0 UNION Xb1 UNION ... Xbn )"

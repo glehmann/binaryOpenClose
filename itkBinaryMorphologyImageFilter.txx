@@ -346,7 +346,7 @@ BinaryMorphologyImageFilter< TInputImage, TOutputImage, TKernel>
         // The current SE element, which index is hence k, belongs to
         // the difference set in the direction i.  Add it to
         // difference set in dir i
-        m_KernelDifferenceSets[i].push_back(k);
+        m_KernelDifferenceSets[i].push_back(currentOffset);
         }
       else
         {
@@ -374,7 +374,7 @@ BinaryMorphologyImageFilter< TInputImage, TOutputImage, TKernel>
         if( m_Kernel[currentShiftedIndex] <= 0 )
           {
           // Add it to difference set in dir i
-          m_KernelDifferenceSets[i].push_back(k);
+          m_KernelDifferenceSets[i].push_back(currentOffset);
           }
         }                                                                       
                                 
@@ -390,7 +390,8 @@ BinaryMorphologyImageFilter< TInputImage, TOutputImage, TKernel>
     {
     if ((*kernel_it) > 0)
       {
-      m_KernelDifferenceSets[centerKernelIndex].push_back(k);
+      OffsetType currentOffset = m_Kernel.GetOffset(k);
+      m_KernelDifferenceSets[centerKernelIndex].push_back(currentOffset);
       }
     }
 }
