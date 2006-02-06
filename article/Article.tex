@@ -87,6 +87,39 @@ BinaryMorphologicalClosingImageFilter.\label{boundary}}
 \end{figure}
 
 
+\section{Performance}
+A timing test comparing performance on a $371 \times 371 \times 34$
+image showed that the SafeBorder option has a significant impact on execution
+time. This result justify to be able to desactivate the SafeBorder
+option, for the case where the user is sure he won't have border
+effects.
+
+The cost to take care of background values is quite small, and should
+not be a problem in most of cases.
+
+The execution time is different for the 2 foreground values. It is caused by
+the BinaryEroderImageFilter and BinaryDilateImageFilter used internally:
+the execution time of those filters is highly dependent of data.
+
+The results achieved on an Pentium 4
+Processor 3200 MHz with 2048Kb cache, 2048 Mb of RAM and gcc
+4.0.2 are shown in Table~\ref{perf}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{cccccc}
+\hline
+foreground & dilate and erode & erode and dilate & unsafe close & safe close & open  \\
+\hline
+\hline
+100 & 18.434 s & 15.686 s & 18.68 s  & 25.758 s & 15.664 s \\
+200 & 14.716 s & 11.74 s  & 14.746 s & 18.444 s & 11.868 s \\
+\hline
+\end{tabular}
+\caption{Execution time.\label{perf}}
+\end{table}
+
+
 \section{Usage}
 
 First of all, the user must create a structuring element. As usual, the headers
