@@ -179,35 +179,35 @@ erode->SetBackgroundValue( 150 );
 
 \section{Examples}
 
-\begin{figure}[b]
+\begin{figure}[htbp]
 \centering
-\includegraphics{2th_cthead1.eps}
+\includegraphics[scale=1]{2th_cthead1}
 \caption{The input image. The image contains 3 pixels values: black (0), dark
 grey (100) and light grey (200). Each those values can be used as foreground
 value. In the next examples, the light grey is used as foreground and the other
 values as background.\label{input}}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htbp]
 \centering
-\includegraphics{close.eps}
+\includegraphics[scale=1]{close}
 \caption{The input image closed by a disc of radius 40, with SafeBorder=true.
 All background regions smaller than the structuring element are filled with the
 foreground value. The other background regions are not modified.\label{safe}}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htbp]
 \centering
-\includegraphics{close-unsafe.eps}
+\includegraphics[scale=1]{close-unsafe}
 \caption{The input image closed by a disc of radius 40, with SafeBorder=false.
 The border effects are clearly visible on the right and bottom side of the
 image, but are also there on the top and left side of the image.
 SafeBorder=false must be used very carefully.\label{unsafe}}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htbp]
 \centering
-\includegraphics{open.eps}
+\includegraphics[scale=1]{open}
 \caption{The opened image with a disc of radius 8. Only the foreground (light
 grey) regions of the input image where the structuring element fit are kept in
 light grey; the other foreground regions are added to the background (in-between
