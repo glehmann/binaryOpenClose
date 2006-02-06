@@ -23,6 +23,7 @@
 #include "itkConstantPadImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodIterator.h"
+#include "itkProgressReporter.h"
 
 namespace itk {
 
@@ -189,6 +190,7 @@ BinaryMorphologicalClosingImageFilter<TInputImage, TOutputImage, TKernel>
   outIt.GoToBegin(); 
   inIt.GoToBegin(); 
 
+  ProgressReporter progress2(this, 0, this->GetOutput()->GetRequestedRegion().GetNumberOfPixels(), 20, 0.9, 0.1);
   while( !outIt.IsAtEnd() )
     {
     if( outIt.Get() != m_ForegroundValue )
@@ -197,10 +199,10 @@ BinaryMorphologicalClosingImageFilter<TInputImage, TOutputImage, TKernel>
       }
     ++outIt;
     ++inIt;
+    progress2.CompletedPixel();
     }
   
   // the end !
-  this->SetProgress( 1.0f );
 }
 
 template<class TInputImage, class TOutputImage, class TKernel>
