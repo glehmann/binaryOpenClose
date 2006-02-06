@@ -53,6 +53,9 @@ TARGET_LINK_LIBRARIES(close ${Libraries})
 ADD_EXECUTABLE(open open.cxx) 
 TARGET_LINK_LIBRARIES(open ${Libraries})
 
+ADD_EXECUTABLE(close_border close_border.cxx) 
+TARGET_LINK_LIBRARIES(close_border ${Libraries})
+
 #the following line is an example of how to add a test to your project.
 #Testname is the title for this particular test.  ExecutableToRun is the
 #program which will be running this test.  It can either be a part of this
